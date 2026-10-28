@@ -1,0 +1,24 @@
+# ---- 构建产物 ----
+build/
+.gradle/
+out/
+run/
+
+# ---- 第三方 jar（版权 + 体积，不入库；见各自目录的 README）----
+compile_only_depend/*.jar
+mixin-libs/*.jar
+gradle/wrapper/gradle-wrapper.jar
+
+# ---- 编辑器 / 临时 ----
+*.log
+*.bak
+*.orig
+*.tmp
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# ---- 本地工具集成（机器绑定）----
+.mcp.json
+.mcp.json.backup.*
