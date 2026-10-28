@@ -1,0 +1,99 @@
+plugins {
+    id 'java'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.38'
+}
+
+version = project.version
+group = project.group
+
+base {
+    archivesName = "${mod_id}-forge-${minecraft_version}"
+}
+
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(17) }
+}
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods { "${mod_id}" { source sourceSets.main } }
+        }
+    }
+}
+
+repositories {
+    // 开发环境里 repo1.maven.org 走不通（只解析到 IPv6），所以同时挂了阿里云 public 镜像。
+    mavenCentral()
+    maven { name = 'Aliyun'; url = 'https://maven.aliyun.com/repository/public' }
+    maven { name = 'MinecraftForge'; url = 'https://maven.minecraftforge.net/' }
+    maven { name = 'Sponge'; url = 'https://repo.spongepowered.org/repository/maven-public/' }
+}
+
+// MixinGradle：声明 refmap（official → SRG），并把 mixin 配置打进 jar
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    compileOnly 'org.spongepowered:mixin:0.8.5'
+    compileOnly 'com.google.code.gson:gson:2.10.1'
+
+    // Curios API（编译期依赖；运行期由用户安装的 Curios mod 提供）
+    compileOnly fileTree(dir: 'compile_only_depend', includes: ['*.jar'])
+
+    // Mixin 注解处理器：生成 refmap。
+    // Sponge 仓库的 pom 是 404，所以用本地 jar 走 files()。
+    annotationProcessor files('mixin-libs/mixin-processor.jar')
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    var expandProps = [
+            'version'                   : version,
+            'group'                     : project.group,
+            'minecraft_version'         : minecraft_version,
+            'minecraft_version_range'   : minecraft_version_range,
+            'mod_name'                  : mod_name,
+            'mod_author'                : mod_author,
+            'mod_id'                    : mod_id,
+            'license'                   : license,
+            'description'               : project.description,
+            'forge_version'             : forge_version,
+            'forge_loader_version_range': forge_loader_version_range,
+            'java_version'              : java_version
+    ]
+    filesMatching(['pack.mcmeta', 'META-INF/mods.toml']) {
+        expand expandProps
+    }
+    inputs.properties(expandProps)
+}
+
+jar {
+    manifest {
+        attributes([
+                'MixinConfigs'          : "${mod_id}.mixins.json",
+                'Specification-Title'   : mod_name,
+                'Specification-Vendor'  : mod_author,
+                'Specification-Version' : project.jar.archiveVersion,
+                'Implementation-Title'  : project.name,
+                'Implementation-Version': project.jar.archiveVersion,
+                'Implementation-Vendor' : mod_author,
+                'Built-On-Minecraft'    : minecraft_version
+        ])
+    }
+}
+
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

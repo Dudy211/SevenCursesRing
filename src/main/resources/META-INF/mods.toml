@@ -1,0 +1,39 @@
+modLoader="javafml"
+loaderVersion="${forge_loader_version_range}"
+license="${license}"
+
+# 纯客户端模组：装在任何服务器上都不需要服务端安装。
+# IGNORE_ALL_VERSION = 不参与版本兼容性检查，服务器没装也不会报"缺少模组"。
+displayTest="IGNORE_ALL_VERSION"
+
+[[mods]]
+modId="${mod_id}"
+version="${version}"
+displayName="${mod_name}"
+logoFile="logo.png"
+authors="${mod_author}"
+description='''
+${description}
+'''
+
+[[dependencies.${mod_id}]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forge_loader_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+# Curios API —— 七咒之戒本体是饰品，必须装 Curios
+[[dependencies.${mod_id}]]
+    modId="curios"
+    mandatory=true
+    versionRange="[5.4.0,)"
+    ordering="AFTER"
+    side="BOTH"
