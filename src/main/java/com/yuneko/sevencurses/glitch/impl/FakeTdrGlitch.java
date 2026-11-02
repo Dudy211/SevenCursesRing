@@ -6,12 +6,12 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 假死演出（纯表演，零风险）。
+ * D 组 · 假 TDR 演出（纯表演，零风险）。
  *
  * <p>流程：
  * <ol>
  *   <li>画面被黑幕盖住（复用 signal_loss 的黑幕绘制）；</li>
- *   <li>0.7 秒后中间浮出一个仿 Windows 的
+ *   <li>0.8 秒后中间浮出一个仿 Windows 的
  *       「显示驱动程序已停止响应并且已恢复」对话框；</li>
  *   <li>对话框上方还浮一行假的 {@code nvlddmkm} 驱动名 + TDR 计数；</li>
  *   <li>整个故障结束后一切消失（不弹真 Screen、不暂停游戏、不阻塞输入）。</li>

@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * 七咒统一调度层（单例）。
  *
- * <p>默认全部关闭 —— 必须显式 {@code /curse toggle gpu}（或戴上戒指）才会开始作妖。
+ * <p>默认全部关闭 —— 必须显式 {@code /curse toggle gpu} 才会开始作妖。
  * {@link #panic()} 是硬性安全出口：清空全部诅咒 + 强制复原所有渲染/按键状态。
  */
 public final class CurseManager {
@@ -57,6 +57,11 @@ public final class CurseManager {
 
     public RenderGlitchScheduler glitches() {
         return glitchScheduler;
+    }
+
+    /** 戒指是否正戴着 —— 客户端拿它决定要不要维持「缓」的帧率上限。 */
+    public boolean ringEquipped() {
+        return ringEquipped;
     }
 
     /** 一键解除：清空全部诅咒 + 强制复原全部渲染 / 按键状态。 */
@@ -120,8 +125,7 @@ public final class CurseManager {
         }
     }
 
-    /** 总开关关掉时的收尾：把正在跑的故障全部停下并复原。 */
-    private void stopAllWhenDisabled() {
+    private void stopAllWhenDisabled() {   // 总开关关掉时的收尾
         if (glitchScheduler.isBusy()) {
             glitchScheduler.stopAll();
         }

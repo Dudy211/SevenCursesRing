@@ -6,7 +6,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 颜色叛变：整个世界被染成紫 / 绿 / 负片。
+ * B 组 · 色调错乱：整个世界被染成紫 / 绿 / 负片。
  *
  * <p>实现方式不是「设一次全局颜色」—— 那样一帧内就被 MC 自己的绘制覆盖了。
  * 而是挂在 {@link com.yuneko.sevencurses.mixin.RenderSystemMixin} 里，

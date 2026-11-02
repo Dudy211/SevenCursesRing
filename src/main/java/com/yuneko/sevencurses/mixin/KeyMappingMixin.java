@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * 「乱指」—— 键盘错位。
+ * 第 4 咒 · 键盘错位。
  *
  * <p>注入点（字节码实证）：{@code KeyboardHandler.keyPress} 收到物理按键后依次调用
  * <pre>

@@ -7,7 +7,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 迟世（TPS 抽风）：在<b>服务端 tick</b>上随机睡一下 → mspt 飙升 → TPS 真掉。
+ * 第 7 咒 · 迟世（TPS 抽风）：在<b>服务端 tick</b>上随机睡一下 → mspt 飙升 → TPS 真掉。
  *
  * <p>跟 {@code fps_spike}（客户端帧率）不一样：这个是<b>世界</b>卡 ——
  * 怪物不动、方块更新延迟、掉落物悬停，但 FPS 数字是正常的。
@@ -16,7 +16,7 @@ import net.minecraft.util.RandomSource;
  * {@link ServerGlitchState#tickSeen} 一次都没涨，说明 {@code MinecraftServer.tickServer}
  * 的 Mixin 没挂上（换版本 / 别的模组抢了 / 映射漂了）。
  * 这时自动切到 {@link ServerGlitchState#eventFallback}，由 {@code ServerTickEvent}
- * 在服务端线程补睡 —— 效果一样，只是路径不同。日志里会留一行 WARN。
+ * 在主线程之外补睡 —— 效果一样，只是路径不同。日志里会留一行 WARN。
  */
 public final class TpsSpikeGlitch implements RenderGlitch {
 

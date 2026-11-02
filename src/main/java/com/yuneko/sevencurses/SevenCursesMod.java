@@ -17,7 +17,7 @@ import top.theillusivec4.curios.api.CuriosApi;
  * 七咒之戒 —— Forge 1.20.1。七咒全部实现（v1.4.0）。
  *
  * <p>TPS 抽风改走 Mixin {@code MinecraftServer.tickServer}（比事件监听靠谱）。
- * 锁内存做了安全版（有界池 + 搅动线程）。
+ * 锁内存做了安全版（有界池 + 看门狗）。
  */
 @Mod(SevenCursesMod.MODID)
 public class SevenCursesMod {

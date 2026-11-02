@@ -5,10 +5,8 @@ import java.util.Optional;
 /**
  * 七咒。
  *
- * <p>七咒如今全部落地；枚举保持完整，这样 {@code /curse list} 和 HUD 一开始就是齐的。
- *
- * <p>注意：{@code GPU} 是「垂烬」，它底下才是那 16 个渲染故障 ——
- * 其余六咒各自只有一个效果。
+ * <p>当前只有 GPU（第 3 咒）真正落地，其余六个是预留开关位 ——
+ * 保持枚举完整，这样 {@code /curse list} 和 HUD 从一开始就是完整的。
  */
 public enum CurseType {
 

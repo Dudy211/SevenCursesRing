@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * 「垂烬」· 深浅失序 + 空间拉伤。
+ * 第 3 咒 · B 组（Z 冲突）+ C 组（几何错乱）。
  *
  * <p>目标方法签名（javap 实证）：
  * <pre>

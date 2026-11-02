@@ -12,10 +12,10 @@ import java.util.Random;
 import java.util.function.BooleanSupplier;
 
 /**
- * 「迟世」（TPS 抽风）—— 直接 Mixin {@link MinecraftServer#tickServer}。
+ * 第 7 咒 · 迟世（TPS 抽风）—— 直接 Mixin {@link MinecraftServer#tickServer}。
  *
  * <p>之前用 {@code ServerTickEvent} 监听不靠谱（事件总线可能没触发），
- * 改成直接在 tickServer 入口睡 → mspt 飙到 60~250 → TPS 掉到 4~8，
+ * 改成直接在 tickServer 入口睡 → mspt 飙到 80~250 → TPS 掉到 4~8，
  * 怪物冻结、方块更新延迟。
  *
  * <p><b>v1.4.0 加了两件事，专门治"看起来没生效"：</b>
@@ -27,7 +27,7 @@ import java.util.function.BooleanSupplier;
  * </ol>
  *
  * <p>在 client mixin 列表里 → 单机集成服务器（同进程）能读到。
- * 独服没跑我们的调度器 → flag 不被 set → 不生效。
+ * 独服没跑我们的调度器 → flag 不被 set → 不生效（此时由 {@code ServerTickEvent} 兜底也不会有 flag）。
  */
 @Mixin(MinecraftServer.class)
 public abstract class MinecraftServerMixin {

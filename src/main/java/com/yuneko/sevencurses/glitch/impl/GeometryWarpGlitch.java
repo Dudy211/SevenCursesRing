@@ -6,7 +6,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 空间拉伤：整个世界被拉伸 / 压扁 / 漂移。
+ * C 组 · 几何错乱：整个世界被拉伸 / 压扁 / 漂移。
  *
  * <p>实现方式：在 {@link com.yuneko.sevencurses.mixin.LevelRendererMixin} 的
  * {@code LevelRenderer.renderLevel} HEAD 里直接改那个 PoseStack。
@@ -17,7 +17,7 @@ import net.minecraft.util.RandomSource;
  *                             偏移 240:  renderLevel(FJLPoseStack;)V
  * </pre>
  * 也就是说传进 {@code renderLevel} 的 PoseStack 是<b>每帧一个全新的局部对象</b>，
- * 改它不会跳帧累积，也<b>不需要 push/pop</b> —— 因此不存在
+ * 改它不会跨帧累积，也<b>不需要 push/pop</b> —— 因此不存在
  * 「push/pop 不配对 → Pose stack not empty → 进世界就崩」那个经典坑。
  *
  * <p>变形量用慢速正弦驱动（不是逐帧随机），否则会变成高频抖动，既不像显卡故障又晃眼。

@@ -6,7 +6,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 断信：画面被黑幕盖住 2 秒左右，像显示器断了信号。
+ * B 组 · 信号丢失：画面被黑幕盖住 2 秒左右，像显示器断了信号。
  *
  * <p>实际绘制在 {@link com.yuneko.sevencurses.client.CurseHudOverlay}。
  *

@@ -7,12 +7,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.RandomSource;
 
 /**
- * 沉夜：gamma 打到 0（最暗）+ 雾色压到接近黑。
+ * 第 5 咒 · 亮度颠倒：gamma 打到 0（最暗）+ 雾色压到接近黑。
  *
  * <p>原版 gamma 被 clamp 在 [0, 1]，到不了负数（没法真正反色），
  * 但 gamma=0 + 黑雾 = 世界几乎全黑，比单纯"暗"更恶心。
  *
- * <p>真正反色需要光影 shader（不在本 mod 能力范围内）。
+ * <p>真正反色需要 Iris/OptiFine shader（不在 mod 能力范围内）。
  */
 public final class GammaLockGlitch implements RenderGlitch {
 

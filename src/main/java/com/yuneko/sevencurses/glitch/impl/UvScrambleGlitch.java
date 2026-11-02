@@ -7,7 +7,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 经纬错织：纹理坐标被随机拉偏，观感是条纹 / 糊成色块 —— 最像「显存坏了」的一种。
+ * UV 拉花：纹理坐标被随机拉偏，观感是条纹 / 糊成色块 —— 最像「显存坏了」的一种。
  *
  * <p>实际改写发生在 {@link com.yuneko.sevencurses.mixin.TextureAtlasSpriteMixin}。
  */

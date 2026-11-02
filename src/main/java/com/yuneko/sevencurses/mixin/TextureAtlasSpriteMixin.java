@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * 「垂烬」· 经纬错织。
+ * 第 3 咒 · UV 拉花。
  *
  * <p>把纹理坐标随机拉偏 —— 观感是条纹 / 糊成色块，最像「显存坏了」。
  *

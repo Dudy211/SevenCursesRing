@@ -20,7 +20,7 @@ annotationProcessor files('mixin-libs/mixin-processor.jar')
    取 `mixin-0.8.5-processor.jar`，重命名成 `mixin-processor.jar`。
 2. **从 Gradle 缓存里捞**：跑过任何 MixinGradle 项目之后，
    `~/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/*/mixin-0.8.5-processor.jar`
-3. ForgeGradle 下载的 mixin 包里也带 processor（同一个 class 集合）。
+3. ForgeGradle 下载的 `mixin` 包里也带 processor（同一个 class 集合）。
 
 ## 它是干嘛的
 

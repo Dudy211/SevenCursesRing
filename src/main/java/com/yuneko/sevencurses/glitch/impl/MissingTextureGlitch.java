@@ -6,7 +6,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 贴图遗失：方块 / 物品全部回退成经典的「紫黑缺失贴图」。
+ * 贴图丢失：方块 / 物品全部回退成经典的「紫黑缺失贴图」。
  *
  * <p>⚠️ v3 大改 —— 之前走 {@code TextureAtlas.getSprite} 是错的：
  * 方块 UV 在<b>烘焙时</b>就烧进了四边形顶点数据，渲染时根本不读 getSprite。

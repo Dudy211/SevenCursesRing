@@ -6,15 +6,15 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 目眩：画面自己转起来（roll 倾斜 + yaw/pitch 摇摆）。
+ * C 组 · 镜头抽搐：画面自己转起来（roll 倾斜 + yaw/pitch 摇摆）。
  *
  * <p>实现方式：Forge 的 <b>{@code ViewportEvent.ComputeCameraAngles}</b> 事件
  * （已 javap 确认有 getRoll/setRoll/getYaw/setYaw/getPitch/setPitch）。
  *
- * <p>这是整条 HEAVY 组里最安全的一种 —— 镜头角度每帧都会被原版重算，
+ * <p>这是整条 C 组里最安全的一种 —— 镜头角度每帧都会被原版重算，
  * 我们只是往结果上叠一个偏移，没有任何状态需要还原。
  *
- * <p>用慢速正弦而不是逐帧随机：逐帧随机 = 画面高频抽搽，容易把人晃晕。
+ * <p>用慢速正弦而不是逐帧随机：逐帧随机 = 画面高频抽搐，容易把人晃晕。
  */
 public final class CameraChaosGlitch implements RenderGlitch {
 

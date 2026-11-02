@@ -9,12 +9,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * 「垂烬」· 两个拦截点，都在 {@link RenderSystem} 上：
+ * 第 3 咒 · 两个拦截点，都在 {@link RenderSystem} 上：
  *
  * <ol>
- *   <li>{@code setShaderColor} —— 颜色叛变：把每次设色乘上滤镜。
+ *   <li>{@code setShaderColor} —— 色调错乱：把每次设色乘上滤镜。
  *       好处：glitch 结束自动恢复（每帧现算，不存在"忘了还原"）。</li>
- *   <li>{@code setShaderTexture(int, ResourceLocation)} —— 贴图遗失：
+ *   <li>{@code setShaderTexture(int, ResourceLocation)} —— 贴图丢失：
  *       凡是绑定 {@code textures/atlas/*} 的，换成我们注册的紫黑棋盘贴图。
  *       这是让<b>方块</b>真变紫黑的唯一可行路线（方块 UV 是烘焙死的，
  *       改 getSprite / getU0 在渲染时根本不会被读到）。</li>
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderSystem.class)
 public abstract class RenderSystemMixin {
 
-    /* ---------- 颜色叛变 ---------- */
+    /* ---------- 色调错乱 ---------- */
 
     @Inject(method = "setShaderColor(FFFF)V", at = @At("HEAD"), cancellable = true)
     private static void sevencurses$tint(float red, float green, float blue, float alpha, CallbackInfo ci) {
@@ -45,7 +45,7 @@ public abstract class RenderSystemMixin {
         ci.cancel();
     }
 
-    /* ---------- 贴图遗失（换绑 atlas）---------- */
+    /* ---------- 贴图丢失（换绑 atlas）---------- */
 
     @Inject(
             method = "setShaderTexture(ILnet/minecraft/resources/ResourceLocation;)V",

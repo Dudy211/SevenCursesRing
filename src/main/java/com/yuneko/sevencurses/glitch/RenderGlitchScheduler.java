@@ -1,5 +1,6 @@
 package com.yuneko.sevencurses.glitch;
 
+import com.yuneko.sevencurses.boon.HardwareProfile;
 import com.yuneko.sevencurses.config.CurseConfig;
 import com.yuneko.sevencurses.glitch.impl.ArtifactBlocksGlitch;
 import com.yuneko.sevencurses.glitch.impl.CameraChaosGlitch;
@@ -37,7 +38,7 @@ import java.util.Map;
  * <p>自保规则（硬性）：
  * <ul>
  *   <li>同一时刻只播一个故障；</li>
- *   <li>单次时长被 config 硬上限夹住（默认 2~6 秒，上限 400 tick = 20 秒）；</li>
+ *   <li>单次时长被 config 硬上限夹住（默认 45 tick ≈ 2.25 秒，上限 60 = 3 秒）；</li>
  *   <li>同一种故障进冷却表，避免连着来两轮；</li>
  *   <li>强度过滤：{@code maxIntensity} 以下的才会进候选池；</li>
  *   <li>{@link #stopAll()} 一定调用 {@code current.stop()} + {@link GlitchRuntime#resetAll()}。</li>
@@ -58,7 +59,7 @@ public final class RenderGlitchScheduler {
         all.add(new MissingTextureGlitch());
         all.add(new UvScrambleGlitch());
         all.add(new ArtifactBlocksGlitch());
-        // MEDIUM —— 动 GL 状态 / 黑幕 / 帧率 / 降载 / 停钟 / 沉夜 / 淤积
+        // MEDIUM —— 动 GL 状态 / 黑幕 / 帧率 / 降载
         all.add(new DepthChaosGlitch());
         all.add(new ColorWarpGlitch());
         all.add(new SignalLossGlitch());
@@ -67,7 +68,7 @@ public final class RenderGlitchScheduler {
         all.add(new FrameLockGlitch());
         all.add(new GammaLockGlitch());
         all.add(new MemoryPressureGlitch());
-        // HEAVY —— 矩阵 / 镜头 / 演出 / TPS / 鼠标
+        // HEAVY —— 矩阵 / 镜头 / 演出 / TPS
         all.add(new GeometryWarpGlitch());
         all.add(new CameraChaosGlitch());
         all.add(new FakeTdrGlitch());
@@ -93,6 +94,12 @@ public final class RenderGlitchScheduler {
         }
         if (!CurseConfig.GLITCH_ENABLED.get()) {
             stopAll();
+            return;
+        }
+        // ★ 闸 1：帧率采样期间（进世界头两秒）一个故障都不放。
+        //   否则「停钟 / 呼吸不匀」会把采样污染成 5~15fps → 高端机被误判成烂机器
+        //   → 七福「净」反而给满护甲。就 2 秒，刚进世界感知不到。
+        if (!HardwareProfile.fpsMeasured) {
             return;
         }
 
@@ -187,7 +194,7 @@ public final class RenderGlitchScheduler {
         int scaled = Math.min(400, (int) (base * glitch.durationScale()));
         remaining = scaled;
         cooldown.put(glitch.id(), CurseConfig.GLITCH_COOLDOWN.get());
-        // 每轮换种子 —— 贴图遗失的"坏哪一批"才会跟着换（否则每轮都是同样几张）
+        // 每轮换种子 —— 贴图丢失的"坏哪一批"才会跟着换（否则每轮都是同样几张）
         GlitchRuntime.seed = random.nextInt();
         glitch.start(random);
     }

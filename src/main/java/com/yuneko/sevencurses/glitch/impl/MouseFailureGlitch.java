@@ -6,7 +6,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 失手：随机「完全失灵」或「反转」。
+ * 第 6 咒 · 鼠标失灵：随机「完全失灵」或「反转」。
  *
  * <p>实际改写在 {@link com.yuneko.sevencurses.mixin.MouseHandlerMixin}：
  * <ul>

@@ -5,11 +5,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
 /**
- * 第 4 咒 · 乱指 —— 状态机。
+ * 第 4 咒 · 键盘错位 —— 状态机。
  *
  * <p>不是「一直错位」，而是 **脉冲式**：
  * <pre>
- *   BURST(15~30 秒错位) → REST(3~8 秒正常) → BURST → ...
+ *   BURST(4~8 秒错位) → REST(8~20 秒正常) → BURST → ...
  * </pre>
  * 这样玩家会先以为是自己手滑，然后才慢慢发现不对劲 —— 折磨感更强，
  * 也不至于让人难受得直接退游戏。

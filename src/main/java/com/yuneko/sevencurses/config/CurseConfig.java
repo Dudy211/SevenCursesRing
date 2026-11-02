@@ -5,7 +5,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
 /**
- * 客户端配置：{@code config/sevencurses-client-v2.toml}。
+ * 客户端配置：{@code config/sevencurses-client.toml}。
  *
  * <p>所有值在运行期读取（不在构造期读），因为 config 加载晚于 mod 构造。
  * 读取前一律用 {@code CurseConfig.SPEC.isLoaded()} 兜底。
@@ -18,7 +18,7 @@ public final class CurseConfig {
     public static final ForgeConfigSpec.BooleanValue GLOBAL_ENABLED;
     public static final ForgeConfigSpec.BooleanValue HUD_ENABLED;
 
-    /* ---- 「垂烬」：渲染故障调度 ---- */
+    /* ---- 第 3 咒：渲染故障调度 ---- */
     public static final ForgeConfigSpec.BooleanValue GLITCH_ENABLED;
     public static final ForgeConfigSpec.IntValue GLITCH_INTENSITY;
     public static final ForgeConfigSpec.IntValue GLITCH_MIN_INTERVAL;
@@ -59,7 +59,15 @@ public final class CurseConfig {
     public static final ForgeConfigSpec.IntValue TPS_SLEEP_MAX;
     public static final ForgeConfigSpec.BooleanValue G_MOUSE_FAILURE;
 
-    /* ---- 「乱指」：键盘错位 ---- */
+    /* ---- 七福 ---- */
+    public static final ForgeConfigSpec.BooleanValue BOON_ENABLED;
+    public static final ForgeConfigSpec.DoubleValue BOON_LEVEL_DECAY;
+    public static final ForgeConfigSpec.IntValue BOON_OVERRIDE_HEAP_MB;
+    public static final ForgeConfigSpec.IntValue BOON_OVERRIDE_CORES;
+    public static final ForgeConfigSpec.IntValue BOON_OVERRIDE_GPU_TIER;
+    public static final ForgeConfigSpec.IntValue BOON_OVERRIDE_FPS;
+
+    /* ---- 第 4 咒：键盘错位 ---- */
     public static final ForgeConfigSpec.IntValue KEY_BURST_MIN;
     public static final ForgeConfigSpec.IntValue KEY_BURST_MAX;
     public static final ForgeConfigSpec.IntValue KEY_REST_MIN;
@@ -75,7 +83,7 @@ public final class CurseConfig {
                 .define("hud", true);
         b.pop();
 
-        b.comment("垂烬 —— 随机渲染故障调度器").push("glitch");
+        b.comment("第 3 咒：显卡临终 —— 随机渲染故障调度器").push("glitch");
         GLITCH_ENABLED = b.comment("渲染故障总开关。")
                 .define("enabled", true);
         GLITCH_INTENSITY = b.comment("强度上限：0=只出 LIGHT 1=含 MEDIUM 2=含 HEAVY")
@@ -93,19 +101,19 @@ public final class CurseConfig {
 
         b.comment("===== LIGHT：纯视觉，零风险 =====").push("light");
 
-        b.comment("贴图遗失（方块/物品随机变成紫黑格子）").push("missing_texture");
+        b.comment("贴图丢失（方块/物品随机变成紫黑格子）").push("missing_texture");
         G_MISSING_TEXTURE = b.define("enabled", true);
         MISSING_CHANCE = b.comment("多少比例的贴图会变格子（0.35 = 35%）")
                 .defineInRange("chance", 0.35D, 0.0D, 1.0D);
         b.pop();
 
-        b.comment("经纬错织（纹理被拉成条纹 / 糊成色块）").push("uv_scramble");
+        b.comment("UV 拉花（纹理被拉成条纹 / 糊成色块）").push("uv_scramble");
         G_UV_SCRAMBLE = b.define("enabled", true);
         UV_AMOUNT = b.comment("UV 抖动幅度：0.1 轻微拉花，0.5 糊成一团")
                 .defineInRange("amount", 0.25D, 0.0D, 2.0D);
         b.pop();
 
-        b.comment("显存碎屑（屏幕随机出现显存坏点式的彩条）").push("artifact_blocks");
+        b.comment("假花屏色块（屏幕随机出现显存坏点式的彩条）").push("artifact_blocks");
         G_ARTIFACT_BLOCKS = b.define("enabled", true);
         b.pop();
 
@@ -113,35 +121,35 @@ public final class CurseConfig {
 
         b.comment("===== MEDIUM：会动 GL 状态，但成对还原 =====").push("medium");
 
-        b.comment("深浅失序（物体互相穿插 / 忽隐忽现）").push("depth_chaos");
+        b.comment("Z 冲突（物体互相穿插 / 忽隐忽现）").push("depth_chaos");
         G_DEPTH_CHAOS = b.define("enabled", true);
         b.pop();
 
-        b.comment("颜色叛变（世界被染成紫 / 绿 / 负片）").push("color_warp");
+        b.comment("色调错乱（世界被染成紫 / 绿 / 负片）").push("color_warp");
         G_COLOR_WARP = b.define("enabled", true);
         b.pop();
 
-        b.comment("断信（画面被黑幕盖住约 2 秒；刻意做成保持而不是高频闪烁）").push("signal_loss");
+        b.comment("信号丢失（画面被黑幕盖住约 2 秒；刻意做成保持而不是高频闪烁）").push("signal_loss");
         G_SIGNAL_LOSS = b.define("enabled", true);
         b.pop();
 
-        b.comment("呼吸不匀（FPS 乱跳 / 偶尔卡一帧，走主线程 sleep）").push("fps_spike");
+        b.comment("帧率抽风（FPS 乱跳 / 偶尔卡一帧，走主线程 sleep）").push("fps_spike");
         G_FPS_SPIKE = b.define("enabled", true);
         b.pop();
 
-        b.comment("褪色（渲染距离/云/阴影/AO/粒子全打到地板，GPU 占用真掉）").push("render_downgrade");
+        b.comment("真实降载（渲染距离/云/阴影/AO/粒子全打到地板，GPU 占用真掉）").push("render_downgrade");
         G_RENDER_DOWNGRADE = b.define("enabled", true);
         b.pop();
 
-        b.comment("停钟（framerateLimit 打到 5~15，画面像幻灯片）").push("frame_lock");
+        b.comment("锁帧率（framerateLimit 打到 5~15，画面像幻灯片）").push("frame_lock");
         G_FRAME_LOCK = b.define("enabled", true);
         b.pop();
 
-        b.comment("沉夜（gamma=0 + 黑雾，世界几乎全黑）").push("gamma_lock");
+        b.comment("亮度压暗（gamma=0 + 黑雾，世界几乎全黑）").push("gamma_lock");
         G_GAMMA_LOCK = b.define("enabled", true);
         b.pop();
 
-        b.comment("淤积（安全版：占 25% 堆 + 搅动线程制造真 GC 卡顿，不会毁存档）").push("memory_pressure");
+        b.comment("锁内存 · 淤积（安全版：占 25% 堆 + 搅动线程制造真 GC 卡顿，不会毁存档）").push("memory_pressure");
         G_MEMORY_PRESSURE = b.define("enabled", true);
         MEM_HOLD_FRACTION = b.comment(
                         "占位比例：吃掉 maxHeap 的多少。默认 0.25。",
@@ -149,7 +157,7 @@ public final class CurseConfig {
                 .defineInRange("holdFraction", 0.25D, 0.0D, 0.45D);
         MEM_CHURN = b.comment(
                         "搅动：一条守护线程不停 new 4MB 数组只保留最近 12 个（≈48MB 活动集），",
-                        "让 young GC 连绵不断 —— 这才是「锁内存」该有的手感。默认开。",
+                        "让 young GC 连绵不断 —— 这才是\"锁内存\"该有的手感。默认开。",
                         "关掉就只剩占位（F3 的 Mem 会高，但不卡）。")
                 .define("churn", true);
         b.pop();
@@ -158,19 +166,19 @@ public final class CurseConfig {
 
         b.comment("===== HEAVY：矩阵 / 镜头 / 演出 =====").push("heavy");
 
-        b.comment("空间拉伤（世界被拉伸 / 压扁 / 漂移）").push("geometry_warp");
+        b.comment("几何错乱（世界被拉伸 / 压扁 / 漂移）").push("geometry_warp");
         G_GEOMETRY_WARP = b.define("enabled", true);
         b.pop();
 
-        b.comment("目眩（画面自己倾斜摇摆）").push("camera_chaos");
+        b.comment("镜头抽搐（画面自己倾斜摇摆）").push("camera_chaos");
         G_CAMERA_CHAOS = b.define("enabled", true);
         b.pop();
 
-        b.comment("假死（黑屏 + 仿 Windows「显示驱动程序已停止响应」对话框，纯 HUD 演出）").push("fake_tdr");
+        b.comment("假 TDR（黑屏 + 仿 Windows「显示驱动程序已停止响应」对话框，纯 HUD 演出）").push("fake_tdr");
         G_FAKE_TDR = b.define("enabled", true);
         b.pop();
 
-        b.comment("迟世（服务端 tick 上睡 → mspt 飙升 → 世界真卡，单机有效）").push("tps_spike");
+        b.comment("TPS 抽风 · 迟世（服务端 tick 上睡 → mspt 飙升 → 世界真卡，单机有效）").push("tps_spike");
         G_TPS_SPIKE = b.define("enabled", true);
         TPS_SLEEP_MIN = b.comment("每个 tick 最少睡多少毫秒。默认 60。")
                 .defineInRange("minSleepMs", 60, 1, 900);
@@ -180,14 +188,14 @@ public final class CurseConfig {
                 .defineInRange("maxSleepMs", 200, 1, 2000);
         b.pop();
 
-        b.comment("失手（完全不动 or 反转，随机）").push("mouse_failure");
+        b.comment("鼠标失灵（完全不动 or 反转，随机）").push("mouse_failure");
         G_MOUSE_FAILURE = b.define("enabled", true);
         b.pop();
 
         b.pop();
         b.pop();
 
-        b.comment("乱指 —— 脉冲式，错位一阵子（好不容易习惯）再恢复正常（又得重新适应）").push("keyscramble");
+        b.comment("第 4 咒：键盘错位 —— 脉冲式，错位一阵子（好不容易习惯）再恢复正常（又得重新适应）").push("keyscramble");
         KEY_BURST_MIN = b.comment("错位持续时间下限（tick）。默认 300 = 15秒，够你开始适应。")
                 .defineInRange("burstMinTicks", 300, 20, 72000);
         KEY_BURST_MAX = b.comment("错位持续时间上限（tick）。默认 600 = 30秒。")
@@ -196,6 +204,27 @@ public final class CurseConfig {
                 .defineInRange("restMinTicks", 60, 20, 72000);
         KEY_REST_MAX = b.comment("恢复正常时间上限（tick）。默认 160 = 8秒。")
                 .defineInRange("restMaxTicks", 160, 20, 72000);
+        b.pop();
+
+        b.comment("七福 —— 与七咒一体两面，只作用于戴着戒指的人；机器越好，福越弱").push("boon");
+        BOON_ENABLED = b.comment("七福总开关。")
+                .define("enabled", true);
+        BOON_LEVEL_DECAY = b.comment(
+                        "谦：每升 1 级，七福整体衰减多少。默认 0.03 → 30 级后七福归零。",
+                        "想让它一直有效就把这里改成 0。")
+                .defineInRange("levelDecayPerLevel", 0.03D, 0.0D, 0.2D);
+        BOON_OVERRIDE_HEAP_MB = b.comment("调试用：覆盖「堆内存」判定值（MB）。0 = 自动读真实值。")
+                .defineInRange("overrideHeapMb", 0, 0, 262144);
+        BOON_OVERRIDE_CORES = b.comment("调试用：覆盖「CPU 核心数」判定值。0 = 自动。")
+                .defineInRange("overrideCores", 0, 0, 256);
+        BOON_OVERRIDE_GPU_TIER = b.comment(
+                        "调试用：覆盖「显卡档位」0~3（0=核显 3=很猛）。-1 = 自动探测。",
+                        "强机上想看看穷人版七福长什么样，把这里填 0。")
+                .defineInRange("overrideGpuTier", -1, -1, 3);
+        BOON_OVERRIDE_FPS = b.comment(
+                        "调试用：覆盖「实测帧率」判定值。0 = 自动（进世界头两秒实测）。",
+                        "不换机器也想看各档手感：60 = 护甲 +7.5，120 = 刚好 0，144 = 倒扣 3 点。")
+                .defineInRange("overrideFps", 0, 0, 1000);
         b.pop();
 
         SPEC = b.build();

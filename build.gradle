@@ -29,8 +29,7 @@ minecraft {
 }
 
 repositories {
-    // 开发环境里 repo1.maven.org 走不通（只解析到 IPv6），所以同时挂了阿里云 public 镜像。
-    mavenCentral()
+    // ⚠️ 本环境 repo1.maven.org 走不通（只解析到 IPv6），统一用阿里云 public 镜像。
     maven { name = 'Aliyun'; url = 'https://maven.aliyun.com/repository/public' }
     maven { name = 'MinecraftForge'; url = 'https://maven.minecraftforge.net/' }
     maven { name = 'Sponge'; url = 'https://repo.spongepowered.org/repository/maven-public/' }

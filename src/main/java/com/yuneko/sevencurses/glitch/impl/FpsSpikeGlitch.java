@@ -6,7 +6,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 呼吸不匀：在客户端 tick 里随机睡一下，制造帧率突然跳动 / 偶尔卡死一帧。
+ * 帧率抽风：在客户端 tick 里随机睡一下，制造帧率突然跳动 / 偶尔卡死一帧。
  *
  * <p>实际睡眠在 {@link com.yuneko.sevencurses.client.ClientBootstrap#onClientTick}。
  *

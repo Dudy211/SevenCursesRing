@@ -7,7 +7,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 深浅失序：随机几秒关掉深度测试，物体互相穿插、忽隐忽现。
+ * B 组 · Z 冲突：随机几秒关掉深度测试，物体互相穿插、忽隐忽现。
  *
  * <p>实际改写发生在 {@link com.yuneko.sevencurses.mixin.LevelRendererMixin}：
  * HEAD 里 {@code disableDepthTest()}，RETURN 里 {@code enableDepthTest()}。

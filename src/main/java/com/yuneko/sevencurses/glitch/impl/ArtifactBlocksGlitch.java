@@ -6,7 +6,7 @@ import com.yuneko.sevencurses.glitch.RenderGlitch;
 import net.minecraft.util.RandomSource;
 
 /**
- * 显存碎屑：屏幕随机出现显存坏点式的彩条 / 撕裂行。
+ * 假花屏：屏幕随机出现显存坏点式的彩条 / 撕裂行。
  *
  * <p>零风险的一种 —— 只是往 HUD 上画东西，不碰任何 GL 状态。
  * 实际绘制在 {@link com.yuneko.sevencurses.client.CurseHudOverlay}。

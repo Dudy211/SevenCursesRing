@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * 第 4 咒 · 乱指 —— <b>全键随机打乱，只豁免 ESC</b>。
+ * 第 4 咒 · 键盘错位 —— <b>全键随机打乱，只豁免 ESC</b>。
  *
  * <p>每次错位开始时，把 {@code Options.keyMappings} 里所有键盘绑定（KEYSYM）
  * 随机洗成一个置换表：物理键 A → 物理键 B。

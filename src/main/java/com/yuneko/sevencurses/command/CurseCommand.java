@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.yuneko.sevencurses.ServerGlitchState;
+import com.yuneko.sevencurses.boon.BoonService;
+import com.yuneko.sevencurses.boon.HardwareProfile;
 import com.yuneko.sevencurses.config.CurseConfig;
 import com.yuneko.sevencurses.curse.CurseManager;
 import com.yuneko.sevencurses.curse.CurseType;
@@ -12,18 +14,18 @@ import com.yuneko.sevencurses.glitch.impl.MemoryPressureGlitch;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * 客户端指令 {@code /curse}。
  *
  * <pre>
- *   /curse list                     列出七咒状态（带真实作用）
+ *   /curse list                     列出七咒状态
  *   /curse toggle &lt;id&gt;              开/关某一咒
- *   /curse glitch list              列出 16 个渲染故障
- *   /curse glitch now &lt;id&gt;          立刻播放某个故障（跳过随机与强度过滤）
+ *   /curse glitch list              列出渲染故障
+ *   /curse glitch now &lt;id&gt;          立刻播放某个故障（调试）
  *   /curse glitch stop              立刻停止当前故障
- *   /curse diag                     诊断：Mixin 存活 / 实测 mspt / 淤积占用
- *   /curse panic                    一键平息
+ *   /curse panic                    一键解除全部
  * </pre>
  *
  * <p>注册到**客户端** dispatcher，所以进任何服务器都能用，且不会影响服务端。
@@ -113,7 +115,7 @@ public final class CurseCommand {
     }
 
     private static int glitchList(CommandSourceStack source) {
-        StringBuilder sb = new StringBuilder("§6垂烬 §7—— 可用故障\n");
+        StringBuilder sb = new StringBuilder("§6显卡临终 §7—— 可用故障\n");
         String current = CurseManager.get().glitches().currentId();
         for (RenderGlitch glitch : CurseManager.get().glitches().all()) {
             boolean active = glitch.id().equals(current);
@@ -181,6 +183,12 @@ public final class CurseCommand {
             sb.append("§7睡眠区间：§f").append(CurseConfig.TPS_SLEEP_MIN.get())
                     .append("§7~§f").append(CurseConfig.TPS_SLEEP_MAX.get()).append("§7ms/tick\n");
         }
+        // 4) 七福（机器越好越弱；只作用于戴戒指的人）
+        ServerPlayer sp = source.getEntity() instanceof ServerPlayer p ? p : null;
+        sb.append("§6七福 §7（机器越好越弱）：\n");
+        sb.append("§7  ").append(BoonService.describe(sp)).append('\n');
+        sb.append("§7  ").append(HardwareProfile.describe()).append('\n');
+
         sb.append("§8提示：/curse glitch now tps_spike 或 now memory_pressure 可跳过随机，直接放一次。");
         return feedback(source, sb.toString());
     }

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * 「失手」—— 鼠标失灵 / 反转。
+ * 第 6 咒 · 鼠标失灵。
  *
  * <p>字节码实证：{@code turnPlayer()} 直接 {@code getfield accumulatedDX} 读位移
  * （不走 getXVelocity），而且结束后会 {@code putfield} reset。

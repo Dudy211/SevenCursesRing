@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * HUD 层：假花屏 / 黑幕 / 假 TDR 对话框 / 右下角状态提示。
  *
- * <p>这一层完全不碰 GL 状态，是整条「垂烬」里最安全的部分。
+ * <p>这一层完全不碰 GL 状态，是整条第 3 咒里最安全的部分。
  *
  * <p>⚠️ 黑幕刻意做成「一次性盖住并保持」，<b>没有做高频闪烁</b> ——
  * 全屏黑白高频闪有光敏性癫痫风险，那不是整活是伤害。
@@ -31,7 +31,7 @@ public final class CurseHudOverlay implements IGuiOverlay {
     /**
      * 假花屏用的贴图。
      *
-     * <p>⚠️ 这是**占位贴图**（16x16）。自己画好之后直接替换这个文件即可，
+     * <p>⚠️ 这是**占位贴图**（16x16）。主人画好之后直接替换这个文件即可，
      * 尺寸要求：任意 2 的幂正方形，然后把下面 TEX_SIZE 改成对应边长。
      */
     public static final ResourceLocation ARTIFACT_TEX =
@@ -63,7 +63,7 @@ public final class CurseHudOverlay implements IGuiOverlay {
             return;
         }
 
-        // 1) 黑幕（断信 / 假死共用）
+        // 1) 黑幕（信号丢失 / 假 TDR 共用）
         if (GlitchRuntime.signalLoss) {
             int alpha = Math.max(0, Math.min(255, GlitchRuntime.signalLossAlpha));
             graphics.fill(0, 0, screenWidth, screenHeight, alpha << 24);
@@ -101,7 +101,7 @@ public final class CurseHudOverlay implements IGuiOverlay {
             int bh = 1 + rnd.nextInt(18);
 
             if (rnd.nextFloat() < 0.35f) {
-                // 贴图版（占位贴图，替换后效果更真）
+                // 贴图版（占位贴图，主人替换后效果更真）
                 g.blit(ARTIFACT_TEX, x, y, bw, bh, 0.0F, 0.0F,
                         TEX_SIZE, TEX_SIZE, TEX_SIZE, TEX_SIZE);
             } else {

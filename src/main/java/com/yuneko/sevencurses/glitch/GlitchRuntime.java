@@ -24,10 +24,10 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class GlitchRuntime {
 
-    /* ---- LIGHT：贴图遗失（走「换绑 atlas 贴图」路线）----
+    /* ---- LIGHT：贴图丢失（v3 走"换绑 atlas 贴图"路线）----
        ⚠️ 关键认知：方块/物品的 UV 坐标在烘焙时就被烧进了四边形顶点数据，
-          所以改 getSprite / getU0 在渲染时根本不会被读到 —— 那条路是死的。
-          正确做法：在 setShaderTexture 把「方块图集」换成一张紫黑格子的占位贴图。 */
+          所以改 getSprite / getU0 在渲染时根本不会被读到 —— v1/v2 那条路是死的。
+          正确做法：在 setShaderTexture 把"方块图集"换成一张紫黑格子的占位贴图。 */
     public static volatile boolean missingTexture = false;
     /** 我们自己生成的紫黑缺失贴图，注册进 TextureManager。 */
     public static final ResourceLocation MISSING_TEX =
@@ -35,19 +35,19 @@ public final class GlitchRuntime {
     public static volatile boolean texGuard = false;
     public static volatile boolean missingTexReady = false;
 
-    /* ---- LIGHT：经纬错织（只对粒子 / GUI 精灵有效，方块是烘焙的吃不到）---- */
+    /* ---- LIGHT：UV 拉花（只对粒子 / GUI 精灵有效，方块是烘焙的吃不到）---- */
     public static volatile boolean uvScramble = false;
     public static volatile float uvAmount = 0.25f;
 
-    /* ---- LIGHT：显存碎屑 ---- */
+    /* ---- LIGHT：假花屏 ---- */
     public static volatile boolean artifacts = false;
     public static volatile int artifactCount = 0;
     public static volatile long artifactSeed = 0L;
 
-    /* ---- MEDIUM：深浅失序 ---- */
+    /* ---- MEDIUM：Z 冲突 ---- */
     public static volatile boolean depthChaos = false;
 
-    /* ---- MEDIUM：颜色叛变 ---- */
+    /* ---- MEDIUM：色调错乱 ---- */
     public static volatile boolean colorWarp = false;
     public static volatile float warpR = 1.0f;
     public static volatile float warpG = 1.0f;
@@ -55,34 +55,34 @@ public final class GlitchRuntime {
     /** 重入保护：拦截 setShaderColor 时自己不能再被拦一次。 */
     public static volatile boolean tintGuard = false;
 
-    /* ---- MEDIUM：断信（全屏黑幕，非闪烁） ---- */
+    /* ---- MEDIUM：信号丢失（全屏黑幕，非闪烁） ---- */
     public static volatile boolean signalLoss = false;
     public static volatile int signalLossAlpha = 0xE8;
 
-    /* ---- MEDIUM：呼吸不匀（在客户端 tick 里随机睡一下） ---- */
+    /* ---- MEDIUM：帧率抽风（在客户端 tick 里随机睡一下） ---- */
     public static volatile boolean fpsSpike = false;
 
-    /* ---- MEDIUM：沉夜（gamma=0 + 黑雾）---- */
+    /* ---- MEDIUM：亮度压暗（gamma=0 + 黑雾）---- */
     public static volatile boolean gammaDark = false;
 
-    /* ---- MEDIUM：淤积（安全版，有界池 + 搅动线程）---- */
+    /* ---- MEDIUM：锁内存（安全版，有界池 + 看门狗）---- */
     public static volatile boolean memoryPressure = false;
 
-    /* ---- HEAVY：失手 / 反转 ---- */
+    /* ---- HEAVY：鼠标失灵/反转 ---- */
     public static volatile boolean mouseDead = false;
     public static volatile boolean mouseInvert = false;
 
-    /* ---- HEAVY：空间拉伤 ---- */
+    /* ---- HEAVY：几何错乱（世界拉伸 / 漂移） ---- */
     public static volatile boolean geometryWarp = false;
     public static volatile float geometryAmount = 0.12f;
 
-    /* ---- HEAVY：目眩 ---- */
+    /* ---- HEAVY：镜头抽搐 ---- */
     public static volatile boolean cameraChaos = false;
     public static volatile float cameraRoll = 22.0f;
     public static volatile float cameraYaw = 9.0f;
     public static volatile float cameraPitch = 6.0f;
 
-    /* ---- HEAVY：假死演出 ---- */
+    /* ---- HEAVY：假 TDR 演出 ---- */
     public static volatile boolean fakeTdr = false;
     public static volatile long fakeTdrStartMs = 0L;
 

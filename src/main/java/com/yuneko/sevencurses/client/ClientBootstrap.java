@@ -7,10 +7,14 @@ import com.yuneko.sevencurses.command.CurseCommand;
 import com.yuneko.sevencurses.config.CurseConfig;
 import com.yuneko.sevencurses.curse.CurseManager;
 import com.yuneko.sevencurses.glitch.GlitchRuntime;
+import com.yuneko.sevencurses.boon.BoonService;
+import com.yuneko.sevencurses.glitch.impl.FrameLockGlitch;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -35,8 +39,6 @@ public final class ClientBootstrap {
             GLFW.GLFW_KEY_DELETE,
             "key.categories.sevencurses");
 
-    private static final java.util.Random FPS_RND = new java.util.Random();
-
     private ClientBootstrap() {
     }
 
@@ -49,6 +51,10 @@ public final class ClientBootstrap {
         MinecraftForge.EVENT_BUS.addListener(ClientBootstrap::onRegisterClientCommands);
         MinecraftForge.EVENT_BUS.addListener(ClientBootstrap::onComputeCameraAngles);
         MinecraftForge.EVENT_BUS.addListener(ClientBootstrap::onComputeFogColor);
+        // 七福「净」要用实测帧率 —— 每帧喂一次（只在测帧期有效，测完自动停）
+        MinecraftForge.EVENT_BUS.addListener(ClientBootstrap::onRenderStage);
+        // 七咒之戒的自绘 tooltip（原版 tooltip 是 List<Component>，没法让字转）
+        MinecraftForge.EVENT_BUS.addListener(RingTooltipRenderer::onPre);
 
         // 把"七咒之戒"的 curioTick 回调接到 CurseManager
         ClientRingHooks.install();
@@ -82,12 +88,57 @@ public final class ClientBootstrap {
             CurseManager.get().panic();
         }
         CurseManager.get().clientTick();
-        // 「呼吸不匀」：在主线程上随机睡一下，制造 FPS 突然跳动 / 偶尔卡一帧。
+        // 硬件探针（只探一次）+ 七福「缓」的帧率上限维护
+        HardwareProbe.tick();
+        tickFrameCap();
+        // 第 3 咒 · 帧率抽风：在主线程上随机睡一下，制造 FPS 突然跳动 / 偶尔卡一帧。
         // 只动时间、不动 GL / 内存 / 存档，最坏就是一次几百毫秒的卡顿，下帧自动恢复。
         if (GlitchRuntime.fpsSpike) {
             spikeFrame();
         }
         CurseHudOverlay.markTick();
+    }
+
+    private static final java.util.Random FPS_RND = new java.util.Random();
+
+    /* ---- 七福 · 缓 ---- */
+
+    /** 玩家原本的帧率设置；-1 = 当前没在托管。 */
+    private static int savedFrameCap = -1;
+
+    /**
+     * 「缓」：戴着戒指时把帧率上限按显卡档位反向压住，摘下来还原玩家自己的设置。
+     *
+     * <p>⚠️ 停钟（frame_lock）正在播时让路 —— 否则常驻上限会把 5~15fps 的暴击瞬间覆盖掉。
+     * <p>⚠️ framerateLimit 是持久化选项（会写进 options.txt），所以摘下 / 退游时必须还原。
+     */
+    private static void tickFrameCap() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc == null || mc.options == null) {
+            return;
+        }
+        // 测帧期间一律不压帧率：要量的是这台机器的真实表现，不是被我们掐过的 10fps
+        if (!com.yuneko.sevencurses.boon.HardwareProfile.fpsMeasured) {
+            return;
+        }
+        if (FrameLockGlitch.active) {
+            return;   // 这一轮让给「停钟」
+        }
+        if (!CurseManager.get().ringEquipped()) {
+            if (savedFrameCap >= 0) {
+                mc.options.framerateLimit().set(savedFrameCap);
+                savedFrameCap = -1;
+            }
+            return;
+        }
+        int level = mc.player == null ? 0 : mc.player.experienceLevel;
+        int cap = BoonService.frameCap(level);
+        if (savedFrameCap < 0) {
+            savedFrameCap = mc.options.framerateLimit().get();
+        }
+        if (mc.options.framerateLimit().get() != cap) {
+            mc.options.framerateLimit().set(cap);
+        }
     }
 
     /**
@@ -146,8 +197,10 @@ public final class ClientBootstrap {
     }
 
     /**
-     * 「目眩」：用慢速正弦而不是逐帧随机 —— 逐帧随机等于画面高频抽搐，
-     * 既不像显卡故障，也很容易把人晃晕。
+     * 第 3 咒 · 镜头抽搐。
+     *
+     * <p>用慢速正弦而不是逐帧随机 —— 逐帧随机等于画面高频抽搐，既不像显卡故障，
+     * 也很容易把人晃晕。
      */
     private static void onComputeCameraAngles(ViewportEvent.ComputeCameraAngles event) {
         if (!GlitchRuntime.cameraChaos) {
@@ -156,6 +209,13 @@ public final class ClientBootstrap {
         event.setRoll(event.getRoll() + GlitchRuntime.osc(1.7F, 0.0F) * GlitchRuntime.cameraRoll);
         event.setYaw(event.getYaw() + GlitchRuntime.osc(2.3F, 1.1F) * GlitchRuntime.cameraYaw);
         event.setPitch(event.getPitch() + GlitchRuntime.osc(3.1F, 2.2F) * GlitchRuntime.cameraPitch);
+    }
+
+    /** 每帧一次：把这一帧喂给硬件探针（七福「净」的实测帧率）。 */
+    private static void onRenderStage(RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
+            HardwareProbe.onFrame();
+        }
     }
 
     /** 「沉夜」：把雾色压到接近黑，配合 gamma=0 让世界几乎全黑。 */

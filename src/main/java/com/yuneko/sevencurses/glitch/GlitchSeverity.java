@@ -5,7 +5,7 @@ package com.yuneko.sevencurses.glitch;
  *
  * <p>LIGHT  = 只动贴图 / 画点假花屏（纯粹视觉，最安全）
  * <p>MEDIUM = 动 GL 状态（深度 / 混合 / 色调），必须 try-finally 还原
- * <p>HEAVY  = 动矩阵 / 冻结帧 / 假死演出
+ * <p>HEAVY  = 动矩阵 / 冻结帧 / 假 TDR 演出
  */
 public enum GlitchSeverity {
     LIGHT(0),

@@ -9,7 +9,7 @@ import net.minecraft.client.ParticleStatus;
 import net.minecraft.util.RandomSource;
 
 /**
- * 褪色：把渲染设置打到地板 → GPU 占用真的掉下去。
+ * 真实降载：把渲染设置打到地板 → GPU 占用真的掉下去。
  *
  * <p>改的是「瞬时生效、不触发资源重载」的选项：
  * <ul>
